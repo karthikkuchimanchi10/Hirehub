@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HireHub - Connect Talent with Opportunity</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-blue: #2563eb;
+      --primary-purple: #a855f7;
+      --dark-bg: #0f0f1f;
+      --darker-bg: #0a0a15;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --text-light: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg), #1c1c2b);
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(93, 141, 255, 0.1) 0%, rgba(168, 85, 247, 0.05) 30%, transparent 70%);
+      animation: pulse 15s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    /* Top Navigation */
+    .top-bar {
+      width: 100%;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      color: var(--primary-blue);
+    }
+    
+    .top-bar a {
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: 0.3s;
+      position: relative;
+    }
+    
+    .top-bar a:hover {
+      color: white;
+    }
+    
+    .top-bar a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--primary-blue);
+      transition: width 0.3s ease;
+    }
+    
+    .top-bar a:hover::after {
+      width: 100%;
+    }
+
+    /* Main Content */
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 100px 20px 50px;
+    }
+    
+    .content-box {
+      max-width: 900px;
+    }
+    
+    /* Text Animations */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease forwards;
+    }
+    
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .delay-1 {
+      animation-delay: 0.3s;
+    }
+    
+    .delay-2 {
+      animation-delay: 0.6s;
+    }
+    
+    .delay-3 {
+      animation-delay: 0.9s;
+    }
+    
+    .delay-4 {
+      animation-delay: 1.2s;
+    }
+    
+    h1 {
+      font-size: 4rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    
+    h4 {
+      color: var(--text-light);
+      font-weight: 400;
+      margin-top: 10px;
+      font-size: 1.5rem;
+    }
+    
+    p.sub-text {
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      margin-top: 20px;
+      margin-bottom: 50px;
+      line-height: 1.6;
+    }
+
+    /* Buttons */
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    
+    .btn-custom {
+      border-radius: 16px;
+      padding: 22px 25px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      width: 240px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border: none;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+    
+    .btn-custom:nth-child(1) {
+      animation-delay: 1.2s;
+    }
+    
+    .btn-custom:nth-child(2) {
+      animation-delay: 1.4s;
+    }
+    
+    .btn-custom:nth-child(3) {
+      animation-delay: 1.6s;
+    }
+    
+    .btn-custom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn-custom:hover::before {
+      left: 100%;
+    }
+    
+    .btn-custom:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .btn-applicant {
+      background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+    }
+    
+    .btn-hr {
+      background: linear-gradient(135deg, var(--primary-purple), #9333ea);
+    }
+    
+    .btn-admin {
+      background: linear-gradient(135deg, #6366f1, var(--primary-purple));
+    }
+    
+    .btn-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    /* Trusted Section */
+    .trusted-section {
+      margin-top: 40px;
+      padding: 30px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.8s forwards;
+    }
+    
+    .trusted-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    
+    .company-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .company-logo {
+      height: 30px;
+      filter: brightness(0) invert(0.6);
+      transition: filter 0.3s ease;
+    }
+    
+    .company-logo:hover {
+      filter: brightness(0) invert(1);
+    }
+
+    /* Stats Section */
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeInUp 1s ease 2s forwards;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(10, 10, 21, 0.8);
+      padding: 50px 0 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 50px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-column h5 {
+      color: white;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h5::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--primary-blue);
+    }
+    
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 12px;
+    }
+    
+    .footer-column ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .footer-column ul li a:hover {
+      color: white;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background: var(--primary-blue);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .top-bar {
+        padding: 15px 20px;
+      }
+      
+      h1 {
+        font-size: 2.8rem;
+      }
+      
+      h4 {
+        font-size: 1.3rem;
+      }
+      
+      p.sub-text {
+        font-size: 1.1rem;
+      }
+      
+      .btn-custom {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .btn-container {
+        gap: 15px;
+      }
+      
+      .company-logos {
+        gap: 20px;
+      }
+      
+      .company-logo {
+        height: 25px;
+      }
+      
+      .stats-container {
+        gap: 20px;
+      }
+      
+      .stat-number {
+        font-size: 2rem;
+      }
+      
+      .footer-columns {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .btn-custom {
+        padding: 18px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <a href="#" class="logo">
+      <i class="bi bi-briefcase-fill logo-icon"></i>
+      HireHub
+    </a>
+    <div>
+      <a href="#about">About Us</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <div class="content-box">
+      <h1 class="fade-in-up">HireHub</h1>
+      <h4 class="fade-in-up delay-1">Connect Talent with Opportunity</h4>
+      <p class="sub-text fade-in-up delay-2">
+        Your premier job portal bringing together talented professionals and leading companies.<br>
+        Find your dream career or discover exceptional talent today.
+      </p>
+
+      <div class="btn-container">
+        <a href="{% url 'login' 'applicant' %}" class="btn btn-custom btn-applicant">
+          <i class="bi bi-person-circle btn-icon"></i>
+          Continue as <br> Applicant
+        </a>
+        <a href="{% url 'login' 'hr' %}" class="btn btn-custom btn-hr">
+          <i class="bi bi-briefcase btn-icon"></i>
+          Continue as <br> HR
+        </a>
+        </div>
+
+      <div class="trusted-section">
+        <p class="trusted-text">Trusted by 10,000+ companies worldwide</p>
+        <div class="company-logos">
+          <!-- Placeholder for company logos - in a real site, these would be actual company logos -->
+          <div class="company-logo">TechCorp</div>
+          <div class="company-logo">InnovateInc</div>
+          <div class="company-logo">GlobalSoft</div>
+          <div class="company-logo">FutureWorks</div>
+          <div class="company-logo">NexusGroup</div>
+        </div>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-number">500K+</span>
+          <span class="stat-label">Active Job Seekers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50K+</span>
+          <span class="stat-label">Jobs Posted</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">95%</span>
+          <span class="stat-label">Success Rate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-columns">
+        <div class="footer-column">
+          <h5>HireHub</h5>
+          <p style="color: var(--text-muted); line-height: 1.6;">
+            Connecting talented professionals with leading companies worldwide. 
+            Our platform makes job searching and hiring seamless and efficient.
+          </p>
+          <div class="social-links">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h5>For Job Seekers</h5>
+          <ul>
+            <li><a href="#"><i class="bi bi-search"></i> Browse Jobs</a></li>
+            <li><a href="#"><i class="bi bi-file-earmark-person"></i> Create Resume</a></li>
+            <li><a href="#"><i class="bi bi-bell"></i> Job Alerts</a></li>
+            <li><a href="#"><i class="bi bi-graph-up"></i> Career Advice</a></li>
+            <li><a href="#"><i class="bi bi-bookmark"></i> Saved Jobs</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h5>For Employers</h5>
+          <ul>
+            <li><a href="#"><i class="bi bi-plus-circle"></i> Post a Job</a></li>
+            <li><a href="#"><i class="bi bi-search"></i> Browse Candidates</a></li>
+            <li><a href="#"><i class="bi bi-building"></i> Company Profiles</a></li>
+            <li><a href="#"><i class="bi bi-bar-chart"></i> Hiring Analytics</a></li>
+            <li><a href="#"><i class="bi bi-shield-check"></i> Verified Employers</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h5>Support</h5>
+          <ul>
+            <li><a href="#"><i class="bi bi-question-circle"></i> Help Center</a></li>
+            <li><a href="#"><i class="bi bi-telephone"></i> Contact Us</a></li>
+            <li><a href="#"><i class="bi bi-info-circle"></i> About Us</a></li>
+            <li><a href="#"><i class="bi bi-shield-check"></i> Privacy Policy</a></li>
+            <li><a href="#"><i class="bi bi-file-text"></i> Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 HireHub. All rights reserved. | Connecting talent with opportunity since 2020</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

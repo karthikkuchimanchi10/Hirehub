@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recruiter Analytics Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#0b1120;
+    color:white;
+    min-height:100vh;
+    padding:30px;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+.page-title{
+    font-size:40px;
+    margin-bottom:30px;
+    background:linear-gradient(135deg,#a5c9ff,#c084fc);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.stat-card{
+    background:#121c2e;
+    padding:25px;
+    border-radius:20px;
+}
+
+.stat-title{
+    color:#94a3b8;
+    margin-bottom:10px;
+}
+
+.stat-value{
+    font-size:34px;
+    font-weight:bold;
+}
+
+.chart-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(500px,1fr));
+    gap:25px;
+}
+
+.chart-card{
+    background:#121c2e;
+    padding:25px;
+    border-radius:20px;
+}
+
+.chart-card h3{
+    margin-bottom:20px;
+}
+
+.full-width{
+    grid-column:1 / -1;
+}
+
+.insight-card{
+    margin-top:30px;
+    background:#121c2e;
+    padding:25px;
+    border-radius:20px;
+}
+
+canvas{
+    max-height:350px;
+}
+
+.back-btn{
+    display:inline-block;
+    padding:12px 20px;
+    border-radius:12px;
+    background:#ef4444;
+    color:white;
+    text-decoration:none;
+    margin-bottom:25px;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="{% url 'hr_dashboard' %}" class="back-btn">
+    ← Dashboard
+</a>
+
+<h1 class="page-title">
+    Recruiter Analytics Dashboard
+</h1>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-title">Jobs Posted</div>
+        <div class="stat-value">{{ total_jobs }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">Applications</div>
+        <div class="stat-value">{{ total_applications }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">Accepted</div>
+        <div class="stat-value">{{ accepted_count }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">Pending</div>
+        <div class="stat-value">{{ pending_count }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">Rejected</div>
+        <div class="stat-value">{{ rejected_count }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">Success Rate</div>
+        <div class="stat-value">{{ success_rate }}%</div>
+    </div>
+
+</div>
+    <div class="stat-card" style="margin-bottom:30px;">
+
+    <div class="stat-title">
+        Top Performing Job
+    </div>
+
+    {% if top_job %}
+        <div class="stat-value" style="font-size:22px;">
+            {{ top_job.job__job_title }}
+        </div>
+
+        <p style="margin-top:10px;">
+            {{ top_job.count }} Applications
+        </p>
+    {% else %}
+        <div class="stat-value" style="font-size:22px;">
+            No Data Available
+        </div>
+    {% endif %}
+
+</div>
+    <div class="chart-grid">
+
+    <div class="chart-card">
+        <h3>Application Status Distribution</h3>
+        <canvas id="statusChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>Monthly Applications</h3>
+        <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>Applications Per Job</h3>
+        <canvas id="jobChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>Applications By Job Type</h3>
+        <canvas id="jobTypeChart"></canvas>
+    </div>
+
+    <div class="chart-card full-width">
+        <h3>Recruitment Funnel</h3>
+        <canvas id="funnelChart"></canvas>
+    </div>
+
+</div>
+    <div class="insight-card">
+
+    <h2>Recruiter Insights</h2>
+
+    <ul style="margin-top:20px; line-height:2;">
+        <li>Total Jobs Posted: {{ total_jobs }}</li>
+        <li>Total Applications: {{ total_applications }}</li>
+        <li>Success Rate: {{ success_rate }}%</li>
+
+        {% if top_job %}
+        <li>
+            Most Popular Job:
+            {{ top_job.job__job_title }}
+        </li>
+        {% endif %}
+    </ul>
+
+</div>
+    <script>
+
+new Chart(document.getElementById('statusChart'),{
+    type:'doughnut',
+    data:{
+        labels: {{ status_labels|safe }},
+        datasets:[{
+            data: {{ status_counts|safe }}
+        }]
+    }
+});
+
+new Chart(document.getElementById('monthlyChart'),{
+    type:'bar',
+    data:{
+        labels: {{ months|safe }},
+        datasets:[{
+            label:'Applications',
+            data: {{ monthly_counts|safe }}
+        }]
+    }
+});
+
+new Chart(document.getElementById('jobChart'),{
+    type:'bar',
+    data:{
+        labels: {{ job_titles|safe }},
+        datasets:[{
+            label:'Applications',
+            data: {{ job_counts|safe }}
+        }]
+    },
+    options:{
+        indexAxis:'y'
+    }
+});
+
+new Chart(document.getElementById('jobTypeChart'),{
+    type:'polarArea',
+    data:{
+        labels: {{ job_type_labels|safe }},
+        datasets:[{
+            data: {{ job_type_counts|safe }}
+        }]
+    }
+});
+
+new Chart(document.getElementById('funnelChart'),{
+    type:'bar',
+    data:{
+        labels: {{ funnel_labels|safe }},
+        datasets:[{
+            label:'Candidates',
+            data: {{ funnel_counts|safe }}
+        }]
+    }
+});
+
+</script>
+
+</body>
+</html>

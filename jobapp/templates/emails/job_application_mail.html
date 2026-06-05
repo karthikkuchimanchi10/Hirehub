@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0; padding:0; font-family:Segoe UI, Arial; background:#0b1120;">
+
+<div style="max-width:600px; margin:auto; background:#121c2e; padding:25px; border-radius:10px; color:white;">
+
+    <h2 style="margin-bottom:10px; background:linear-gradient(135deg,#a5c9ff,#c084fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+        Application Received
+    </h2>
+
+    <p>Dear <b>{{ first_name }}</b>,</p>
+
+    <p>
+        Thank you for applying for the position of
+        <b>{{ job.job_title }}</b> at <b>{{ job.company_name }}</b>.
+    </p>
+
+    <p style="color:#9ab3d0;">
+        Your application has been successfully submitted and is currently under review.
+    </p>
+
+    <hr style="border:0; border-top:1px solid #2a3b5f; margin:20px 0;">
+
+    <h3 style="margin-bottom:10px;">📄 Application Details</h3>
+
+    <p>
+        <b>Position:</b> {{ job.job_title }}<br>
+        <b>Company:</b> {{ job.company_name }}<br>
+        <b>Location:</b> {{ job.job_location }}
+    </p>
+
+    <hr style="border:0; border-top:1px solid #2a3b5f; margin:20px 0;">
+
+    <p>
+        Our hiring team will review your profile and contact you if you are shortlisted.
+    </p>
+
+    <p style="margin-top:25px;">
+        Regards,<br>
+        <b>Hiring Team</b><br>
+        {{ job.company_name }}
+    </p>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,356 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Applied Jobs</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', sans-serif;
+        }
+
+        body{
+            background:#0b1120;
+            background-image:
+                radial-gradient(circle at top left, #1e2a4a 0%, #0b1120 70%);
+            color:white;
+            min-height:100vh;
+            padding:40px 20px;
+        }
+
+        .container{
+            max-width:1200px;
+            margin:auto;
+        }
+
+        .top-buttons{
+            display:flex;
+            gap:15px;
+            margin-bottom:30px;
+            flex-wrap:wrap;
+        }
+
+        .page-title{
+            font-size:38px;
+            margin-bottom:35px;
+            font-weight:700;
+            background:linear-gradient(135deg, #a5c9ff, #c084fc);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+        .filter-box{
+    background:rgba(18,28,46,0.85);
+    padding:20px;
+    border-radius:18px;
+    margin-bottom:25px;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.filter-form{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.filter-form input{
+    flex:1;
+    min-width:250px;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+}
+
+.search-btn{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    background:#8b5cf6;
+    color:white;
+    cursor:pointer;
+}
+
+.reset-btn{
+    padding:12px 20px;
+    border-radius:10px;
+    background:#475569;
+    color:white;
+    text-decoration:none;
+}
+
+        .jobs-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+            gap:25px;
+        }
+
+        .job-card{
+            background:rgba(18, 28, 46, 0.85);
+            border-radius:22px;
+            padding:25px;
+            backdrop-filter:blur(10px);
+            transition:0.3s ease;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        .job-card:hover{
+            transform:translateY(-5px);
+            box-shadow:0 10px 30px rgba(0,0,0,0.35);
+        }
+
+        .job-title{
+            font-size:24px;
+            font-weight:700;
+            margin-bottom:12px;
+            color:#ffffff;
+        }
+
+        .company{
+            color:#a5c9ff;
+            font-size:16px;
+            margin-bottom:12px;
+        }
+
+        .job-info{
+            margin-bottom:10px;
+            color:#d1d5db;
+            font-size:15px;
+        }
+
+        .job-info i{
+            color:#8b5cf6;
+            margin-right:8px;
+        }
+
+        .empty-box{
+            text-align:center;
+            padding:80px 20px;
+            background:rgba(18, 28, 46, 0.8);
+            border-radius:24px;
+        }
+
+        .empty-box i{
+            font-size:70px;
+            margin-bottom:20px;
+            color:#64748b;
+        }
+
+        .empty-box h2{
+            margin-bottom:10px;
+            font-size:30px;
+        }
+
+        .empty-box p{
+            color:#94a3b8;
+            font-size:16px;
+        }
+
+        /* Back Button */
+
+        .back-btn{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:12px 22px;
+            border-radius:14px;
+            background:linear-gradient(145deg, #dc2626, #ef4444);
+            color:white;
+            text-decoration:none;
+            font-weight:600;
+            transition:0.3s ease;
+            box-shadow:0 6px 18px rgba(239,68,68,0.25);
+        }
+
+        .back-btn:hover{
+            transform:translateY(-3px);
+            box-shadow:0 10px 24px rgba(239,68,68,0.4);
+        }
+
+        /* More Details Button */
+
+        .details-btn{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:10px 18px;
+            border-radius:12px;
+            background:linear-gradient(145deg, #7c3aed, #8b5cf6);
+            color:white;
+            text-decoration:none;
+            font-size:14px;
+            font-weight:600;
+            transition:0.3s ease;
+            margin-top:15px;
+        }
+
+        .details-btn:hover{
+            transform:translateY(-2px);
+            opacity:0.92;
+            box-shadow:0 8px 20px rgba(139,92,246,0.35);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Top Buttons -->
+
+    <div class="top-buttons">
+
+        <a href="{% url 'applicant_dashboard' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+    </div>
+
+    <!-- Page Title -->
+
+    <h1 class="page-title">
+        My Applied Jobs
+    </h1>
+
+
+    <div class="filter-box">
+
+    <form method="GET" class="filter-form">
+
+        <input type="text"
+               name="job"
+               placeholder="Search by Job Title..."
+               value="{{ request.GET.job }}">
+
+        <select name="status">
+
+            <option value="">All Status</option>
+
+            <option value="Pending"
+                {% if request.GET.status == 'Pending' %}selected{% endif %}>
+                Pending
+            </option>
+
+            <option value="Accpected"
+                {% if request.GET.status == 'Accpected' %}selected{% endif %}>
+                Accpected
+            </option>
+
+            <option value="Rejected"
+                {% if request.GET.status == 'Rejected' %}selected{% endif %}>
+                Rejected
+            </option>
+
+        </select>
+
+        <button type="submit" class="search-btn">
+            Search
+        </button>
+
+        <a href="{% url 'my_applied_jobs' %}"
+           class="reset-btn">
+            Reset
+        </a>
+
+    </form>
+
+</div>
+
+    {% if applied_jobs %}
+
+        <div class="jobs-grid">
+
+            {% for application in applied_jobs %}
+
+                <div class="job-card">
+
+                    <h2 class="job-title">
+                        {{ application.job.job_title }}
+                    </h2>
+
+                    <div class="company">
+                        <i class="fas fa-building"></i>
+                        {{ application.job.company_name }}
+                    </div>
+
+                    <div class="job-info">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ application.job.job_location }}
+                    </div>
+
+                    <div class="job-info">
+                        <i class="fas fa-briefcase"></i>
+                        {{ application.job.get_job_type_display }}
+                    </div>
+
+                    <div class="job-info">
+                        <i class="fas fa-money-bill-wave"></i>
+                        ₹ {{ application.job.salary }}
+                    </div>
+
+                    <div class="job-info">
+                        <i class="fas fa-calendar"></i>
+                        Applied On:
+                        {{ application.applied_on|date:"d M Y" }}
+                    </div>
+
+                    <div class="job-info">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        Status:
+                        {{application.Status}}
+                    </div>
+
+                    <!-- More Details Button -->
+
+                    <a href="{% url 'job_detail' application.job.id %}"
+                       class="details-btn">
+
+                        <i class="fas fa-eye"></i>
+                        More Details
+
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-box">
+
+            <i class="fas fa-briefcase"></i>
+
+            <h2>
+                No Applications Yet
+            </h2>
+
+            <p>
+                You haven't applied for any jobs yet.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>

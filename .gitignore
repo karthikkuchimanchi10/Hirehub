@@ -1,0 +1,15 @@
+.env
+venv/
+__pycache__/
+*.pyc
+
+staticfiles/
+media/
+
+.idea/
+
+*.log
+
+db.json
+job_table_5000.csv
+

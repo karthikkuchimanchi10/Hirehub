@@ -1,0 +1,369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Total Applications</title>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/font-awesome.min.css">
+
+<style>
+
+/* =========================
+   BASE
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: #0b1120;
+    background-image: radial-gradient(circle at top left, #1e2a4a 0%, #0b1120 70%);
+    color: white;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: auto;
+}
+
+/* =========================
+   TOP BAR (NEW)
+========================= */
+
+.top-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.page-title {
+    font-size: 34px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a5c9ff, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* BACK BUTTON */
+.back-btn{
+    padding:10px 16px;
+    border-radius:10px;
+    background:#1e293b;
+    color:white;
+    text-decoration:none;
+    font-size:14px;
+    border:1px solid rgba(255,255,255,0.1);
+    transition:0.3s;
+}
+
+.back-btn:hover{
+    background:#334155;
+}
+
+/* =========================
+   FILTER (REDUCED WIDTH)
+========================= */
+
+.filter-box {
+    background: rgba(18,28,46,0.85);
+    padding: 15px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255,255,255,0.08);
+    max-width: 900px;
+}
+
+.filter-form {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-form input,
+.filter-form select {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+}
+
+/* BUTTONS */
+.search-btn {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #8b5cf6;
+    color: white;
+    cursor: pointer;
+}
+
+.reset-btn {
+    padding: 12px 18px;
+    border-radius: 10px;
+    background: #475569;
+    color: white;
+    text-decoration: none;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+/* =========================
+   BIGGER CARDS
+========================= */
+
+.app-card {
+    background: rgba(18,28,46,0.95);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 22px;   /* ⬅ increased */
+    transition: 0.3s;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    min-height: 220px; /* ⬅ bigger */
+}
+
+.app-card:hover {
+    transform: translateY(-6px);
+}
+
+/* HEADER */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.name {
+    font-size: 20px;  /* ⬅ bigger */
+    font-weight: 600;
+}
+
+.meta {
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+/* STATUS */
+.status {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.pending { color: #facc15; }
+.accepted { color: #22c55e; }
+.rejected { color: #ef4444; }
+
+/* BODY */
+.app-body p {
+    margin: 8px 0;
+    font-size: 15px; /* ⬅ bigger text */
+    color: #cbd5e1;
+}
+
+/* ACTIONS */
+.app-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+/* BUTTONS */
+.resume-btn, .details-btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.resume-btn {
+    background: #0ea5e9;
+    color: white;
+}
+
+.details-btn {
+    background: #8b5cf6;
+    color: white;
+}
+
+/* EMPTY */
+.empty-box {
+    text-align: center;
+    padding: 60px;
+    color: #94a3b8;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+    .applications-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .top-bar{
+        flex-direction:column;
+        gap:10px;
+        text-align:center;
+    }
+
+    .applications-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-form {
+        flex-direction: column;
+    }
+
+    .filter-box {
+        max-width: 100%;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+
+        <h1 class="page-title">Total Applications</h1>
+
+        <a href="{% url 'hr_dashboard' %}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-box">
+
+        <form method="GET" class="filter-form">
+
+            <input type="text"
+                   name="job"
+                   placeholder="Search Job Title..."
+                   value="{{ request.GET.job }}">
+
+            <select name="status">
+
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Accpected">Accpected</option>
+                <option value="Rejected">Rejected</option>
+
+            </select>
+
+            <button type="submit" class="search-btn">Search</button>
+
+            <a href="{% url 'total_applications' %}" class="reset-btn">Reset</a>
+
+        </form>
+
+    </div>
+
+    <!-- CARDS -->
+    {% if total_applications %}
+
+    <div class="applications-grid">
+
+        {% for application in total_applications %}
+
+        <div class="app-card">
+
+            <div class="app-header">
+
+                <div>
+                    <div class="name">
+                        {{ application.first_name }} {{ application.last_name }}
+                    </div>
+
+                    <div class="meta">
+                        {{ application.job.job_title }}
+                    </div>
+                </div>
+
+                <div class="status
+                    {% if application.Status == 'Accpected' %}
+                        accepted
+                    {% elif application.Status == 'Rejected' %}
+                        rejected
+                    {% else %}
+                        pending
+                    {% endif %}
+                ">
+                    {{ application.Status }}
+                </div>
+
+            </div>
+
+            <div class="app-body">
+                <p><i class="fa fa-envelope"></i> {{ application.email }}</p>
+                <p><i class="fa fa-phone"></i> {{ application.mobile_num }}</p>
+                <p><i class="fa fa-calendar"></i> {{ application.applied_on|date:"d M Y" }}</p>
+            </div>
+
+            <div class="app-actions">
+
+                {% if application.resume %}
+                <a href="{{ application.resume.url }}" class="resume-btn" target="_blank">
+                    Resume
+                </a>
+                {% endif %}
+
+                <a href="{% url 'application_details' application.id %}" class="details-btn">
+                    Details
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-box">
+        <h2>No Applications Found</h2>
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

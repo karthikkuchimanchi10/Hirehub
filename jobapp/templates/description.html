@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireHub - {{ job.job_title }}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .navbar {
+            background: #111827;
+            border-bottom: 1px solid #334155;
+        }
+        .brand {
+            color: #3b82f6;
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .profile-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #3b82f6;
+            border: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .job-header {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid #334155;
+        }
+        .company-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            object-fit: cover;
+            background: white;
+            padding: 10px;
+        }
+        .job-title {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .company-name {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+        .job-info {
+            color: #cbd5e1;
+        }
+        .action-btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .apply-btn {
+            background: #22c55e;
+            color: white;
+        }
+        .apply-btn:hover {
+            opacity: 0.9;
+        }
+        .save-btn {
+            background: #334155;
+            color: white;
+        }
+        .section-card {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid #334155;
+        }
+        .section-title {
+            color: #3b82f6;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .skill {
+            background: #334155;
+            padding: 10px 18px;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 5px;
+        }
+        .company-details-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid #334155;
+        }
+        .company-details-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 15px;
+            background: white;
+            padding: 8px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .company-details-info h4 {
+            color: #f8fafc;
+            margin-bottom: 8px;
+        }
+        .company-details-info p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #94a3b8;
+        }
+        .section-card ul {
+    padding-left: 1.5rem;
+}
+.section-card ul li {
+    margin-bottom: 8px;
+    color: #cbd5e1;
+}
+        @media (max-width: 768px) {
+            .job-header .row {
+                text-align: center;
+            }
+            .job-header .col-md-3 {
+                margin-top: 20px;
+            }
+            .company-details-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a href="/" class="brand">HireHub</a>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="#" class="profile-btn" title="Profile">
+                        {{ user.username|slice:":1"|upper }}
+                    </a>
+                {% else %}
+                    <a href="#" class="profile-btn">A</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- ========== JOB HEADER ========== -->
+        <div class="job-header">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center">
+                    {% if job.company_logo %}
+                        <img src="{{ job.company_logo.url }}" class="company-logo" alt="{{ job.company_name }} logo">
+                    {% else %}
+                        <div class="company-logo d-flex align-items-center justify-content-center bg-white">
+                            <span class="fw-bold text-dark">🏢</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-7">
+                    <h1 class="job-title">{{ job.job_title }}</h1>
+                    <p class="company-name">{{ job.company_name }}</p>
+                    <p class="job-info">
+                        📍 {{ job.job_location }} |
+                        💼 {{ job.get_job_type_display }} |
+                        💰 {% if job.salary %} ₹{{ job.salary }} LPA {% else %} Not disclosed {% endif %}
+                        {% if job.experience_level %} | ⏳ {{ job.experience_level }} {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                    <a href="{% url 'apply_job' job.id %}" class="action-btn apply-btn">Apply Now</a>
+                    <a href="{%url 'applicant_dashboard' %}" class="btn btn-danger">Back</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== JOB DESCRIPTION ========== -->
+        <div class="section-card">
+            <h3 class="section-title">📄 Job Description</h3>
+            <p>{{ job.job_description|linebreaks }}</p>
+        </div>
+
+        <!-- ========== KEY RESPONSIBILITIES ========== -->
+{% if job.responsibilities %}
+<div class="section-card">
+    <h3 class="section-title">🎯 Key Responsibilities</h3>
+    <ul>
+        {% for line in job.responsibilities.splitlines %}
+            {% if line.strip %}
+                <li>{{ line.strip }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+        <!-- ========== REQUIRED SKILLS ========== -->
+        <div class="section-card">
+            <h3 class="section-title">🛠️ Required Skills</h3>
+            {% if skills %}
+                {% for skill in skills %}
+                    <span class="skill">{{ skill }}</span>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No specific skills listed</p>
+            {% endif %}
+        </div>
+
+        <!-- ========== COMPANY DETAILS (merged) ========== -->
+        <div class="company-details-card">
+            {% if job.company_logo %}
+                <img src="{{ job.company_logo.url }}" class="company-details-logo" alt="{{ job.company_name }}">
+            {% else %}
+                <div class="company-details-logo d-flex align-items-center justify-content-center bg-white">
+                    <span class="fw-bold text-dark">🏢</span>
+                </div>
+            {% endif %}
+            <div class="company-details-info">
+                <h4>{{ job.company_name }}</h4>
+                {% if job.company_description %}
+                    <p>{{ job.company_description }}</p>
+                {% else %}
+                    <p>A reputed organization delivering innovative solutions in the tech industry.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        © {% now "Y" %} HireHub. Connecting Talent With Opportunities.
+    </footer>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

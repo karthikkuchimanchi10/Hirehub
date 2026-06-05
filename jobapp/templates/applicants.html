@@ -1,0 +1,395 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Applicant Details</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#0b1120;
+    background-image:radial-gradient(circle at top left,#1e2a4a 0%,#0b1120 70%);
+    color:white;
+    min-height:100vh;
+    padding:40px 20px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.page-title{
+    font-size:38px;
+    margin-bottom:30px;
+    font-weight:700;
+    background:linear-gradient(135deg,#a5c9ff,#c084fc);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.card{
+    background:rgba(18,28,46,.85);
+    border-radius:24px;
+    padding:30px;
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(12px);
+}
+
+.section{
+    margin-bottom:35px;
+}
+
+.section-title{
+    color:#a5c9ff;
+    font-size:24px;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.info-box{
+    background:rgba(255,255,255,.03);
+    border-radius:16px;
+    padding:18px;
+}
+
+.label{
+    color:#94a3b8;
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.value{
+    font-size:16px;
+    font-weight:600;
+}
+
+.resume-btn{
+    display:inline-block;
+    text-decoration:none;
+    background:#0ea5e9;
+    color:white;
+    padding:12px 20px;
+    border-radius:12px;
+    margin-right:10px;
+}
+
+.download-btn{
+    display:inline-block;
+    text-decoration:none;
+    background:#8b5cf6;
+    color:white;
+    padding:12px 20px;
+    border-radius:12px;
+}
+
+.action-buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.accept-btn{
+    background:#22c55e;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.reject-btn{
+    background:#ef4444;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:30px;
+    text-decoration:none;
+    color:white;
+    background:#475569;
+    padding:12px 20px;
+    border-radius:12px;
+}
+
+.status{
+    display:inline-block;
+    padding:10px 18px;
+    border-radius:12px;
+    font-weight:600;
+}
+
+.pending{
+    background:#f59e0b;
+}
+
+.accepted{
+    background:#22c55e;
+}
+
+.rejected{
+    background:#ef4444;
+}
+
+.exp-box{
+    background:rgba(255,255,255,.03);
+    padding:20px;
+    border-radius:16px;
+    line-height:1.8;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 class="page-title">
+    Applicant Details
+</h1>
+
+<div class="card">
+
+    <!-- PERSONAL DETAILS -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Personal Information
+        </h2>
+
+        <div class="grid">
+
+            <div class="info-box">
+                <div class="label">Full Name</div>
+                <div class="value">
+                    {{ application.first_name }}
+                    {{ application.last_name }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Email</div>
+                <div class="value">
+                    {{ application.email }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Mobile Number</div>
+                <div class="value">
+                    {{ application.mobile_num }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Age</div>
+                <div class="value">
+                    {{ application.age }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Gender</div>
+                <div class="value">
+                    {{ application.get_gender_display }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Applied On</div>
+                <div class="value">
+                    {{ application.applied_on|date:"d M Y" }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EDUCATION -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Education Details
+        </h2>
+
+        <div class="grid">
+
+            <div class="info-box">
+                <div class="label">Highest Degree</div>
+                <div class="value">
+                    {{ application.get_highest_degree_display }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Field</div>
+                <div class="value">
+                    {{ application.field }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Graduation Year</div>
+                <div class="value">
+                    {{ application.graduation }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Institute</div>
+                <div class="value">
+                    {{ application.institute }}
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Grade / CGPA</div>
+                <div class="value">
+                    {{ application.grade }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EXPERIENCE -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Experience Details
+        </h2>
+
+        <div class="exp-box">
+
+            <strong>Experience :</strong>
+            {{ application.get_experience_display }}
+
+            <br><br>
+
+            {% if application.exp_details %}
+                {{ application.exp_details }}
+            {% else %}
+                No experience details provided.
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- RESUME -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Resume
+        </h2>
+
+{% if application.resume %}
+    <a href="{{ application.resume.url }}" target="_blank" class="resume-btn">
+        View Resume
+    </a>
+{% else %}
+    <p>No Resume Uploaded</p>
+{% endif %}
+
+    </div>
+
+    <!-- STATUS -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Application Status
+        </h2>
+
+        {% if application.Status == 'Accpected' %}
+            <span class="status accepted">Accpected</span>
+
+        {% elif application.Status == 'Rejected' %}
+            <span class="status rejected">Rejected</span>
+
+        {% else %}
+            <span class="status pending">Pending</span>
+        {% endif %}
+
+    </div>
+
+    <!-- ACCEPT / REJECT -->
+
+    {% if application.Status == 'Pending' %}
+
+    <div class="action-buttons">
+
+        <form method="POST"
+              action="{% url 'update_status' application.id %}">
+            {% csrf_token %}
+            <button type="submit"
+                    name="status"
+                    value="Accpected"
+                    class="accept-btn">
+                <i class="fas fa-check"></i>
+                Accpected Applicant
+            </button>
+        </form>
+
+        <form method="POST"
+              action="{% url 'update_status' application.id %}">
+            {% csrf_token %}
+            <button type="submit"
+                    name="status"
+                    value="Rejected"
+                    class="reject-btn">
+                <i class="fas fa-times"></i>
+                Reject Applicant
+            </button>
+        </form>
+
+    </div>
+
+    {% endif %}
+
+    <a href="{% url 'total_applications' %}"
+       class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Applications
+    </a>
+
+</div>
+
+</div>
+
+</body>
+</html>

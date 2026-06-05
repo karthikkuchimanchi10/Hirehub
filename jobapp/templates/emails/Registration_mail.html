@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f6fa; padding: 20px; margin: 0; }
+    .container { max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2 { color: #1f2d3d; margin-bottom: 20px; font-weight: 600; }
+    p { color: #333333; line-height: 1.6; margin-bottom: 15px; font-size: 14px; }
+    .button { display: inline-block; padding: 12px 25px; margin: 20px 0; background-color: #0056b3; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: 600; }
+    .footer { margin-top: 25px; font-size: 12px; color: #888888; line-height: 1.4; }
+  </style>
+</head>
+<body>
+  <div class="container">
+<h2>
+    Dear {% if salutation %}{{ salutation }} {% endif %}
+    {{ first_name }} {{ last_name }},
+</h2>
+
+{% if role == 'HR' and status == 'Pending' %}
+  <p>Thank you for registering as an <strong>HR professional</strong> on the <strong>HireHub Job Portal</strong>.</p>
+  <p>Your account is currently <strong>pending administrative approval</strong>. You will be notified once it is reviewed.</p>
+
+{% elif role == 'HR' and status == 'Approved' %}
+  <p>We are pleased to inform you that your <strong>HR account has been approved</strong>.</p>
+  <p>You may now log in and start managing hiring activities.</p>
+
+{% elif role == 'HR' and status == 'Rejected' %}
+  <p>We regret to inform you that your <strong>HR registration has been rejected</strong>.</p>
+  <p>As a result, your registration data has been removed from our system.</p>
+
+{% else %}
+  <p>Thank you for registering on <strong>HireHub</strong>.</p>
+  <p>You can now log in and explore opportunities suited to your profile.</p>
+{% endif %}
+
+<!-- ... rest of your template ... -->
+
+    <a href="https://hirehub-1.up.railway.app/" class="button">Access Your Account</a>
+
+    <p class="footer">
+      Need help? Contact us at
+      <a href="mailto:hirehub.com@gmail.com">hirehib.com@gmail.com</a><br>
+      This is an automated message. Please do not reply.<br>
+      &copy; {{ year }} HireHub. All rights reserved.
+    </p>
+  </div>
+</body>
+</html>
