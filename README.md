@@ -300,6 +300,7 @@ Skills
 ________________________________________
 Conclusion:
 HireHub simplifies the recruitment process by providing an efficient platform for job seekers, recruiters, and administrators. With secure authentication, role-based access, job management, and application tracking, HireHub creates a seamless connection between talent and opportunity
+The Deployed Web link: https://hirehub-1.up.railway.app
 ________________________________________
 License:
 This project is developed for educational and portfolio purposes.
